@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login Page</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.5/xlsx.full.min.js"></script>
+    <link rel="stylesheet" href="zlogin.css" />
+</head>
+<body>
+
+<div class="container">
+    <h2>Login and Export</h2>
+
+    <!-- ✅ Login Form -->
+    <form class="login-form" id="login-form">
+        <input id="name" type="text" placeholder="Name" required />
+        <input id="phone" type="tel" placeholder="Phone" required />
+        <input id="email" type="email" placeholder="Email" required />
+        <input id="city" type="text" placeholder="City" required />
+        <input id="address" type="text" placeholder="Address" required />
+        <label>
+            Gift Box:
+            <input id="gift-box" type="checkbox" />
+        </label>
+        <button type="submit">Submit</button>
+    </form>
+
+    <!-- ✅ Display Cart Summary -->
+    <h3>Order Summary</h3>
+    <ul id="cart-summary"></ul>
+    <div id="summary-total"></div>
+</div>
+
+<script>
+    const cart = new Map(JSON.parse(localStorage.getItem('cart')) || []);
+    let allOrders = JSON.parse(localStorage.getItem('allOrders')) || [];
+
+    // ✅ Display Cart Summary
+    function displayCartSummary() {
+        const cartSummary = document.getElementById('cart-summary');
+        const totalPriceElem = document.getElementById('summary-total');
+        cartSummary.innerHTML = '';
+        let total = 0;
+
+        if (cart.size === 0) {
+            cartSummary.innerHTML = '<li>No items in cart</li>';
+            totalPriceElem.textContent = '';
+            return;
+        }
+
+        cart.forEach((details, item) => {
+            const li = document.createElement('li');
+            li.innerHTML = `${item} - ₹${details.price} x ${details.quantity}`;
+            cartSummary.appendChild(li);
+            total += details.price * details.quantity;
+        });
+
+        totalPriceElem.textContent = `Total: ₹${total}`;
+    }
+
+    // ✅ Export Data to Excel
+    function exportToExcel(order) {
+        const data = [
+            ["Name", "Phone", "Email", "City", "Address", "Gift Box", "Item", "Price", "Quantity", "Total"]
+        ];
+
+        order.items.forEach((item, index) => {
+            if (index === 0) {
+                data.push([
+                    order.name,
+                    order.phone,
+                    order.email,
+                    order.city,
+                    order.address,
+                    order.giftBox,
+                    item.item,
+                    item.price,
+                    item.quantity,
+                    order.total
+                ]);
+            } else {
+                data.push([
+                    "", "", "", "", "", "",
+                    item.item,
+                    item.price,
+                    item.quantity,
+                    ""
+                ]);
+            }
+        });
+
+        const wb = XLSX.utils.book_new();
+        const ws = XLSX.utils.aoa_to_sheet(data);
+        ws['!cols'] = [
+            { wch: 20 }, { wch: 15 }, { wch: 25 }, { wch: 15 }, { wch: 25 },
+            { wch: 10 }, { wch: 20 }, { wch: 10 }, { wch: 10 }, { wch: 10 }
+        ];
+
+        XLSX.utils.book_append_sheet(wb, ws, "Order Details");
+        XLSX.writeFile(wb, "Order_Details.xlsx");
+    }
+
+    // ✅ Handle Form Submission
+    document.getElementById('login-form').addEventListener('submit', (event) => {
+        event.preventDefault();
+
+        const order = {
+            name: document.getElementById('name').value,
+            phone: document.getElementById('phone').value,
+            email: document.getElementById('email').value,
+            city: document.getElementById('city').value,
+            address: document.getElementById('address').value,
+            giftBox: document.getElementById('gift-box').checked ? 'Yes' : 'No',
+            items: Array.from(cart.entries()).map(([item, details]) => ({
+                item,
+                price: details.price,
+                quantity: details.quantity
+            })),
+            total: Array.from(cart.values()).reduce((sum, item) => sum + item.price * item.quantity, 0),
+            status: "Order Confirmed"
+        };
+
+        allOrders.push(order);
+        localStorage.setItem('allOrders', JSON.stringify(allOrders));
+        localStorage.setItem('currentOrder', JSON.stringify(order));
+
+        // ✅ Export to Excel BEFORE Redirecting
+        exportToExcel(order);
+
+        console.log('Redirecting to order tracking page...');
+
+        // ✅ Delay redirection to ensure Excel file is downloaded
+        setTimeout(() => {
+            window.location.href = './zorder.html'; // ✅ Adjust the path if needed
+        }, 500);
+    });
+
+    document.addEventListener('DOMContentLoaded', displayCartSummary);
+</script>
+
+</body>
+</html>

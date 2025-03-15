@@ -1,0 +1,209 @@
+/* General Styles */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #ffdde1, #ee9ca7); /* Gradient background */
+    color: #333;
+    margin: 0;
+    padding: 0;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    animation: backgroundAnimation 6s ease infinite alternate;
+}
+
+/* Animated Background */
+@keyframes backgroundAnimation {
+    from {
+        background-position: 0% 50%;
+    }
+    to {
+        background-position: 100% 50%;
+    }
+}
+
+/* Full-Screen Login Box */
+.container {
+    background: rgba(255, 255, 255, 0.95);
+    padding: 40px;
+    margin: 10px; /* Added 10px margin on all sides */
+    border-radius: 16px;
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+    width: calc(100vw - 20px);
+    height: calc(100vh - 20px);
+    box-sizing: border-box;
+    backdrop-filter: blur(12px);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 20px;
+}
+
+/* Heading */
+h2, h3 {
+    color: #d81b60; /* High contrast color for better visibility */
+    font-size: 3em;
+    text-align: center;
+    margin-bottom: 16px;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    font-weight: 700;
+}
+
+/* Form Styling */
+.login-form {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+/* Input Fields */
+input[type="text"],
+input[type="tel"],
+input[type="email"],
+input[type="number"] {
+    width: 100%;
+    padding: 18px;
+    border: none;
+    border-radius: 16px;
+    background-color: #fffaf0;
+    font-size: 18px;
+    color: #333;
+    box-shadow: inset 0 4px 8px rgba(0, 0, 0, 0.1);
+    outline: none;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+input:focus {
+    transform: scale(1.02);
+    box-shadow: 0 4px 12px rgba(233, 30, 99, 0.2);
+}
+
+/* Checkbox Label */
+label {
+    font-size: 18px;
+    color: #555;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+input[type="checkbox"] {
+    width: 20px;
+    height: 20px;
+    accent-color: #e91e63;
+    cursor: pointer;
+}
+
+/* Button Styling */
+button {
+    background: linear-gradient(135deg, #e91e63, #ff6f61);
+    color: #ffffff;
+    padding: 18px;
+    border: none;
+    border-radius: 24px;
+    cursor: pointer;
+    font-size: 20px;
+    font-weight: bold;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    margin-top: 16px;
+    box-shadow: 0 8px 16px rgba(233, 30, 99, 0.2);
+}
+
+button:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 24px rgba(233, 30, 99, 0.3);
+}
+
+button:active {
+    transform: translateY(1px);
+    box-shadow: 0 4px 8px rgba(233, 30, 99, 0.2);
+}
+
+/* Order Summary */
+#cart-summary {
+    list-style: none;
+    padding: 0;
+    margin: 20px 0;
+    background: rgba(255, 250, 240, 0.8);
+    border: 1px solid #ffb6c1;
+    border-radius: 16px;
+    padding: 16px;
+    max-height: 180px;
+    overflow-y: auto;
+    box-shadow: inset 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* Cart Items */
+#cart-summary li {
+    padding: 12px;
+    border-bottom: 1px solid #ffb6c1;
+    font-size: 18px;
+    color: #333;
+}
+
+#cart-summary li:last-child {
+    border-bottom: none;
+}
+
+/* Total Price */
+#summary-total {
+    font-size: 22px;
+    font-weight: bold;
+    color: #e91e63;
+    text-align: center;
+    margin-top: 12px;
+}
+
+/* Scrollbar Styling */
+#cart-summary::-webkit-scrollbar {
+    width: 8px;
+}
+
+#cart-summary::-webkit-scrollbar-thumb {
+    background-color: #e91e63;
+    border-radius: 10px;
+    transition: background-color 0.3s ease;
+}
+
+#cart-summary::-webkit-scrollbar-thumb:hover {
+    background-color: #d81b60;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    h2, h3 {
+        font-size: 2.4em;
+    }
+
+    input[type="text"],
+    input[type="tel"],
+    input[type="email"],
+    input[type="number"] {
+        font-size: 16px;
+        padding: 14px;
+    }
+
+    button {
+        font-size: 18px;
+        padding: 16px;
+    }
+
+    .container {
+        padding: 20px;
+        width: calc(100vw - 20px);
+        height: calc(100vh - 20px);
+    }
+}
+
+/* Fade-in Animation */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
